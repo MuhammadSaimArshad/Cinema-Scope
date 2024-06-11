@@ -60,7 +60,7 @@ class _EditProfileState extends State<EditProfile> {
                       Text(
                         "Edit Profile ",
                         style: TextStyle(
-                            color: Color(0xff00BCD4),
+                            color: const Color(0xff00BCD4),
                             fontSize: width * 0.04,
                             fontWeight: FontWeight.bold),
                       ),
@@ -119,7 +119,7 @@ class _EditProfileState extends State<EditProfile> {
                                         backgroundColor: Colors.grey[300],
                                         child: Icon(
                                           Icons.add_a_photo,
-                                          color: Color(0xff0EBE7F),
+                                          color: const Color(0xff00BCD4),
                                           size: width * 0.05,
                                         ),
                                       ),
@@ -135,7 +135,7 @@ class _EditProfileState extends State<EditProfile> {
                                         backgroundColor: Colors.grey.shade300,
                                         child: Icon(
                                           Icons.photo,
-                                          color: Color(0xff0EBE7F),
+                                          color: const Color(0xff00BCD4),
                                           size: width * 0.05,
                                         ),
                                       ),
