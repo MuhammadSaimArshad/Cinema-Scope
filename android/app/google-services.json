@@ -1,13 +1,32 @@
 {
   "project_info": {
-    "project_number": "267822854111",
-    "project_id": "wheelchiar-guidence",
-    "storage_bucket": "wheelchiar-guidence.appspot.com"
+    "project_number": "1061860351248",
+    "project_id": "fir-47def",
+    "storage_bucket": "fir-47def.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:267822854111:android:741879a28a57e957e19e6a",
+        "mobilesdk_app_id": "1:1061860351248:android:40b2274f2001a1e5b0d995",
+        "android_client_info": {
+          "package_name": "com.example.firebase_auth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ-yEIUsqmlBuZm-mZxSkhHkrKGmurbuM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061860351248:android:3bcae8665572ece2b0d995",
         "android_client_info": {
           "package_name": "com.example.whealchair_guideness"
         }
@@ -15,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCxmRMtb-zSdF8L0jLeFvzyS0wETW3O44U"
+          "current_key": "AIzaSyCJ-yEIUsqmlBuZm-mZxSkhHkrKGmurbuM"
         }
       ],
       "services": {
