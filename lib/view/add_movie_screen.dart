@@ -32,7 +32,7 @@ class _AddMovieState extends State<AddMovie> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black87,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -43,7 +43,7 @@ class _AddMovieState extends State<AddMovie> {
               child: Text(
                 "AddMovie",
                 style: TextStyle(
-                    color: Colors.amber,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 30),
               ),
@@ -53,28 +53,30 @@ class _AddMovieState extends State<AddMovie> {
             ),
             Padding(
               padding: const EdgeInsets.all(12),
-              child: TextFormField(
-                controller: name,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xffFF9800),
-                      width: width * 0.01,
+              child: Container(
+                color: Colors.white,
+                child: TextFormField(
+                  controller: name,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: width * 0.01,
+                      ),
+                    ),
+                    label: Text(
+                      "Name",
+                      style: TextStyle(
+                          color: Colors.black, fontSize: width * 0.035),
                     ),
                   ),
-                  label: Text(
-                    "Name",
-                    style: TextStyle(
-                        color: const Color(0xffFF9800),
-                        fontSize: width * 0.035),
-                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Name';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please Enter Name';
-                  }
-                  return null;
-                },
               ),
             ),
             // Description
@@ -83,28 +85,30 @@ class _AddMovieState extends State<AddMovie> {
             ),
             Padding(
               padding: const EdgeInsets.all(12),
-              child: TextFormField(
-                controller: description,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xffFF9800),
-                      width: width * 0.01,
+              child: Container(
+                color: Colors.white,
+                child: TextFormField(
+                  controller: description,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: width * 0.01,
+                      ),
+                    ),
+                    label: Text(
+                      "Description",
+                      style: TextStyle(
+                          color: Colors.black, fontSize: width * 0.035),
                     ),
                   ),
-                  label: Text(
-                    "Description",
-                    style: TextStyle(
-                        color: const Color(0xffFF9800),
-                        fontSize: width * 0.035),
-                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Description';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please Enter Description';
-                  }
-                  return null;
-                },
               ),
             ),
             // Release
@@ -113,37 +117,39 @@ class _AddMovieState extends State<AddMovie> {
             ),
             Padding(
               padding: const EdgeInsets.all(12),
-              child: TextFormField(
-                controller: release,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xffFF9800),
-                      width: width * 0.01,
+              child: Container(
+                color: Colors.white,
+                child: TextFormField(
+                  controller: release,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: width * 0.01,
+                      ),
+                    ),
+                    label: Text(
+                      "Release",
+                      style: TextStyle(
+                          color: Colors.black, fontSize: width * 0.035),
                     ),
                   ),
-                  label: Text(
-                    "Release",
-                    style: TextStyle(
-                        color: const Color(0xffFF9800),
-                        fontSize: width * 0.035),
-                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Release';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please Enter Release';
-                  }
-                  return null;
-                },
               ),
             ),
 
             // Image Container
             Container(
               height: height * 0.2,
-              width: width * 0.9,
+              width: width * 0.94,
               decoration: BoxDecoration(
-                  color: Colors.amber, borderRadius: BorderRadius.circular(20)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: GridView.builder(
                 itemCount: image.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -160,7 +166,7 @@ class _AddMovieState extends State<AddMovie> {
                             image: DecorationImage(
                                 image: FileImage(File(image[index].path)),
                                 fit: BoxFit.cover),
-                            border: Border.all(color: Colors.amber, width: 1)),
+                            border: Border.all(color: Colors.white, width: 1)),
                       ),
                       IconButton(
                           onPressed: () {
@@ -180,10 +186,10 @@ class _AddMovieState extends State<AddMovie> {
             ),
             SizedBox(
               height: height * 0.07,
-              width: width * 0.9,
+              width: width * 0.94,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber,
+                    backgroundColor: Colors.white,
                   ),
                   onPressed: () {
                     _getFromGallery();
@@ -192,7 +198,7 @@ class _AddMovieState extends State<AddMovie> {
                       child: Text(
                     "MOVIE IMAGE",
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                        color: Colors.black, fontWeight: FontWeight.bold),
                   ))),
             ),
             SizedBox(
@@ -200,10 +206,10 @@ class _AddMovieState extends State<AddMovie> {
             ),
             SizedBox(
               height: height * 0.07,
-              width: width * 0.9,
+              width: width * 0.94,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber,
+                    backgroundColor: Colors.white,
                   ),
                   onPressed: () {
                     _saveData();
@@ -212,7 +218,7 @@ class _AddMovieState extends State<AddMovie> {
                       child: Text(
                     "SAVE DATA",
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                        color: Colors.black, fontWeight: FontWeight.bold),
                   ))),
             ),
           ],
