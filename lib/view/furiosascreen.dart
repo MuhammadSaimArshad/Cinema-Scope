@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:whealchair_guideness/model/add_movie_model.dart';
 
 class FuriosaScreen extends StatefulWidget {
   const FuriosaScreen({super.key});
@@ -22,6 +25,31 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
     setState(() {
       iconColor = Colors.white;
     });
+  }
+
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+  final imagepicker = ImagePicker();
+  List<XFile> image = [];
+
+  List<AddMovieModel> movielist = [];
+  getProducts() async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection("movie").get();
+    snapshot.docs.forEach((doc) {
+      setState(() {
+        movielist
+            .add(AddMovieModel.fromMap(doc.data() as Map<String, dynamic>));
+      });
+    });
+    print('movielist: $movielist');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getProducts();
+    super.initState();
   }
 
   @override
@@ -50,10 +78,27 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
                         height: height * 0.7,
                         width: width,
                         decoration: BoxDecoration(
-                            color: Colors.grey,
-                            image: DecorationImage(
-                                image: AssetImage("images/f.jpg"),
-                                fit: BoxFit.cover)),
+                          color: Colors.grey,
+                          image: movielist.isNotEmpty &&
+                                  movielist[0].imageUrls != null
+                              ? DecorationImage(
+                                  image: NetworkImage(
+                                    movielist[0].imageUrls![0],
+                                  ),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child:
+                            movielist.isEmpty || movielist[0].imageUrls == null
+                                ? const Center(
+                                    child: Text(
+                                      'No image available',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                  )
+                                : null,
                       ),
                       Container(
                         height: height * 0.7,
@@ -113,7 +158,7 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
                               height: height * 0.31,
                             ),
                             Text(
-                              "Furiosa: A Mad Max Saga",
+                              movielist[0].name!,
                               style: TextStyle(
                                 fontSize: width * 0.04,
                                 color: Colors.white,
@@ -122,7 +167,7 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
                             ),
                             SizedBox(height: height * 0.02),
                             Text(
-                              "Released - 2024 - 149 min",
+                              movielist[0].release!,
                               style: TextStyle(
                                 fontSize: width * 0.04,
                                 color: Colors.white54,
@@ -139,7 +184,7 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
                             SizedBox(height: height * 0.02),
                             Text(
                               textAlign: TextAlign.center,
-                              "Snatched from the Green Place of Many Mothers, young Furiosa falls into the hand of a greatbiker horde led by the warlord Dementus. Sweeping through the Wasteland,they come across the Citadel, presided over by the Immortan Joe. As the two tyrants fight for domin Furiosa soon finds herself in a nonstop battle to make her way home.",
+                              movielist[0].description!,
                               style: TextStyle(
                                 fontSize: width * 0.04,
                                 color: Colors.white54,
@@ -175,68 +220,64 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
                 SizedBox(
                   height: height * 0.18,
                   width: width,
-                  child: Center(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: width * 0.02,
-                          ),
-                          Container(
-                            height: height * 0.15,
-                            width: width * 0.3,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/wa.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                shape: BoxShape.circle),
-                          ),
-                          Container(
-                            height: height * 0.15,
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/sting.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                shape: BoxShape.circle),
-                          ),
-                          Container(
-                            height: height * 0.15,
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/une.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                shape: BoxShape.circle),
-                          ),
-                          Container(
-                            height: height * 0.15,
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/violant.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                shape: BoxShape.circle),
-                          ),
-                          Container(
-                            height: height * 0.15,
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/winnie.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                shape: BoxShape.circle),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('movie')
+                          .snapshots(),
+                      builder: (BuildContext context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+
+                        if (snapshot.hasError) {
+                          print("Error: /${snapshot.error}");
+                          return Text('Error: /${snapshot.error}');
+                        }
+
+                        AddMovieModel? Model;
+                        if (snapshot.data!.docs.length != 0) {
+                          print(
+                              'snapshot.data!.docs.length/${snapshot.data!.docs.length}');
+                        }
+                        return snapshot.data!.docs.length == 0 &&
+                                snapshot.data!.docs.isEmpty
+                            ? const Center(
+                                child: Text('Data not found !'),
+                              )
+                            : ListView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (BuildContext context, int index) {
+                                  Model = AddMovieModel.fromMap(
+                                      snapshot.data!.docs[index].data());
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      height: height * 0.18,
+                                      width: width * 0.3,
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: height * 0.16,
+                                            width: width * 0.3,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      "${Model!.imageUrls![0]}",
+                                                      scale: 2),
+                                                  fit: BoxFit.cover),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                      }),
                 ),
                 SizedBox(
                   height: height * 0.02,
@@ -259,151 +300,90 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
                 SizedBox(
                   height: height * 0.02,
                 ),
-                Container(
-                  height: height * 0.3,
+                SizedBox(
+                  height: height * 0.35,
                   width: width,
-                  decoration: const BoxDecoration(
-                      // color: Colors.black87,
-                      ),
-                  child: Center(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: width * 0.02,
-                          ),
-                          Container(
-                            height: height * 0.28,
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/wa.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                borderRadius:
-                                    BorderRadius.circular(width * 0.06)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "aaaaa",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: width * 0.04),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.02,
-                          ),
-                          Container(
-                            height: height * 0.28,
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/wa.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                borderRadius:
-                                    BorderRadius.circular(width * 0.06)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "aaaaa",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: width * 0.04),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.02,
-                          ),
-                          Container(
-                            height: height * 0.28,
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/violant.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                borderRadius:
-                                    BorderRadius.circular(width * 0.06)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "aaaaa",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: width * 0.04),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.02,
-                          ),
-                          Container(
-                            height: height * 0.28,
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/une.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                borderRadius:
-                                    BorderRadius.circular(width * 0.06)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "aaaaa",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: width * 0.04),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.02,
-                          ),
-                          Container(
-                            height: height * 0.28,
-                            width: width * 0.4,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("images/sting.jpg"),
-                                    fit: BoxFit.cover),
-                                color: Colors.green,
-                                borderRadius:
-                                    BorderRadius.circular(width * 0.06)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "aaaaa",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: width * 0.04),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('movie')
+                          .snapshots(),
+                      builder: (BuildContext context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+
+                        if (snapshot.hasError) {
+                          print("Error: /${snapshot.error}");
+                          return Text('Error: /${snapshot.error}');
+                        }
+
+                        AddMovieModel? Model;
+                        if (snapshot.data!.docs.length != 0) {
+                          print(
+                              'snapshot.data!.docs.length/${snapshot.data!.docs.length}');
+                        }
+                        return snapshot.data!.docs.length == 0 &&
+                                snapshot.data!.docs.isEmpty
+                            ? const Center(
+                                child: Text('Data not found !'),
+                              )
+                            : ListView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (BuildContext context, int index) {
+                                  Model = AddMovieModel.fromMap(
+                                      snapshot.data!.docs[index].data());
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const FuriosaScreen(), // Update this to navigate to the appropriate screen
+                                          ),
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        width: width * 0.4,
+                                        height: height * 0.35,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: height * 0.28,
+                                              width: width * 0.4,
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          "${Model!.imageUrls![0]}",
+                                                          scale: 1),
+                                                      fit: BoxFit.cover),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          width * 0.06)),
+                                            ),
+                                            SizedBox(
+                                              height: height * 0.005,
+                                            ),
+                                            Text(
+                                              "${Model!.name}",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: width * 0.04,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                      }),
                 ),
                 SizedBox(
                   height: height * 0.02,
