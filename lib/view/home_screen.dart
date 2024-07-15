@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:whealchair_guideness/model/add_movie_model.dart';
+import 'package:whealchair_guideness/view/add_movie.dart';
 import 'package:whealchair_guideness/view/add_movie_screen.dart';
 import 'package:whealchair_guideness/view/furiosascreen.dart';
 import 'package:whealchair_guideness/view/search_screen.dart';
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddMovie(),
+                    builder: (context) => AddMovieMain(),
                   ));
             },
             child: Icon(Icons.add_box_rounded)),
@@ -83,6 +84,178 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: height * 0.02,
               ),
+              // SizedBox(
+              //   height: height * 0.3,
+              //   width: width,
+              //   child: StreamBuilder(
+              //     stream: FirebaseFirestore.instance
+              //         .collection('movie')
+              //         .snapshots(),
+              //     builder: (BuildContext context,
+              //         AsyncSnapshot<QuerySnapshot> snapshot) {
+              //       if (snapshot.connectionState == ConnectionState.waiting) {
+              //         return const Center(child: CircularProgressIndicator());
+              //       }
+
+              //       if (snapshot.hasError) {
+              //         print("Error: ${snapshot.error}");
+              //         return Text('Error: ${snapshot.error}');
+              //       }
+
+              //       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              //         return Center(
+              //           child: Text('Data not found!'),
+              //         );
+              //       }
+
+              //       List<AddMovieModel> movies = snapshot.data!.docs
+              //           .map((doc) => AddMovieModel.fromMap(
+              //               doc.data() as Map<String, dynamic>))
+              //           .toList();
+
+              //       return ListView.builder(
+              //         scrollDirection: Axis.horizontal,
+              //         itemCount: movies.length,
+              //         itemBuilder: (context, index) {
+              //           AddMovieModel model = movies[index];
+
+              //           return Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: Container(
+              //               width: width * 0.8,
+              //               decoration: BoxDecoration(
+              //                 color: Colors.white,
+              //                 borderRadius: BorderRadius.circular(10),
+              //                 boxShadow: [
+              //                   BoxShadow(
+              //                     color: Colors.black12,
+              //                     blurRadius: width * 0.02,
+              //                     spreadRadius: width * 0.001,
+              //                   ),
+              //                 ],
+              //               ),
+              //               child: Column(
+              //                 children: [
+              //                   Text(
+              //                     model.name ?? "",
+              //                     style: TextStyle(
+              //                       fontWeight: FontWeight.bold,
+              //                       fontSize: width * 0.04,
+              //                     ),
+              //                   ),
+              //                   SizedBox(
+              //                     height: height * 0.22,
+              //                     width: width,
+              //                     child: CarouselSlider.builder(
+              //                       options: CarouselOptions(
+              //                         aspectRatio: 2,
+              //                         autoPlay: true,
+              //                       ),
+              //                       itemCount: model.imageUrls?.length ?? 0,
+              //                       itemBuilder: (context, index, realIndex) {
+              //                         return Padding(
+              //                           padding: const EdgeInsets.all(8.0),
+              //                           child: Container(
+              //                             height: height * 0.2,
+              //                             width: width,
+              //                             decoration: BoxDecoration(
+              //                               image: DecorationImage(
+              //                                 fit: BoxFit.cover,
+              //                                 image: NetworkImage(
+              //                                     model.imageUrls![index]),
+              //                               ),
+              //                             ),
+              //                           ),
+              //                         );
+              //                       },
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
+              //           );
+              //         },
+              //       );
+              //     },
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: height * 0.02,
+              // ),
+              // SizedBox(
+              //   height: height * 0.3,
+              //   width: width,
+              //   child: StreamBuilder(
+              //     stream: FirebaseFirestore.instance
+              //         .collection('movie')
+              //         .snapshots(),
+              //     builder: (BuildContext context,
+              //         AsyncSnapshot<QuerySnapshot> snapshot) {
+              //       if (snapshot.connectionState == ConnectionState.waiting) {
+              //         return const Center(child: CircularProgressIndicator());
+              //       }
+
+              //       if (snapshot.hasError) {
+              //         print("Error: ${snapshot.error}");
+              //         return Text('Error: ${snapshot.error}');
+              //       }
+
+              //       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              //         return Center(
+              //           child: Text('Data not found!'),
+              //         );
+              //       }
+
+              //       List<AddMovieModel> movies = snapshot.data!.docs
+              //           .map((doc) => AddMovieModel.fromMap(
+              //               doc.data() as Map<String, dynamic>))
+              //           .toList();
+
+              //       return ListView.builder(
+              //         scrollDirection: Axis.horizontal,
+              //         itemCount: movies.length,
+              //         itemBuilder: (context, index) {
+              //           AddMovieModel model = movies[index];
+
+              //           return Column(
+              //             children: [
+              //               SizedBox(
+              //                 height: height * 0.22,
+              //                 width: width,
+              //                 child: CarouselSlider.builder(
+              //                   options: CarouselOptions(
+              //                     aspectRatio: 2,
+              //                     autoPlay: true,
+              //                   ),
+              //                   itemCount: movies.length ?? 0,
+              //                   itemBuilder: (context, index, realIndex) {
+              //                     return Padding(
+              //                       padding: const EdgeInsets.all(8.0),
+              //                       child: Container(
+              //                         height: height * 0.2,
+              //                         width: width,
+              //                         decoration: BoxDecoration(
+              //                           image: DecorationImage(
+              //                             fit: BoxFit.cover,
+              //                             image: NetworkImage(
+              //                                 model.imageUrls![index]),
+              //                           ),
+              //                         ),
+              //                       ),
+              //                     );
+              //                   },
+              //                 ),
+              //               ),
+              //             ],
+              //           );
+              //         },
+              //       );
+              //     },
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: height * 0.02,
+              // ),
               SizedBox(
                 height: height * 0.43,
                 width: width,
@@ -139,26 +312,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       options: CarouselOptions(
-                        height: height * 0.4,
+                        height: height * 0.43,
                         aspectRatio: 18 / 9,
                         viewportFraction: 0.7,
                         initialPage: 0,
                         enableInfiniteScroll: true,
                         reverse: false,
                         autoPlay: true,
-                        autoPlayInterval: const Duration(seconds: 3),
-                        autoPlayAnimationDuration:
-                            const Duration(milliseconds: 400),
+                        autoPlayInterval: Duration(seconds: 3),
+                        autoPlayAnimationDuration: Duration(milliseconds: 400),
                         autoPlayCurve: Curves.fastOutSlowIn,
                         enlargeCenterPage: true,
-                        enlargeFactor: 0.1,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            currentPage = index;
-                          });
-                          // print(currentPage);
-                        },
-                        scrollDirection: Axis.horizontal,
+                        enlargeFactor: 0.3,
                       ),
                     );
                   },
@@ -285,7 +450,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: width * 0.63,
                   ),
                   Text(
-                    "Sea All",
+                    "See All",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.amber,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:whealchair_guideness/model/add_movie_model.dart';
+import 'package:whealchair_guideness/model/add_top_cast_model.dart';
 
 class FuriosaScreen extends StatefulWidget {
   const FuriosaScreen({super.key});
@@ -33,7 +34,7 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
   List<XFile> image = [];
 
   List<AddMovieModel> movielist = [];
-  getProducts() async {
+  getmoviedetail() async {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection("movie").get();
     snapshot.docs.forEach((doc) {
@@ -48,7 +49,7 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    getProducts();
+    getmoviedetail();
     super.initState();
   }
 
@@ -222,7 +223,7 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
                   width: width,
                   child: StreamBuilder(
                       stream: FirebaseFirestore.instance
-                          .collection('movie')
+                          .collection('topcast')
                           .snapshots(),
                       builder: (BuildContext context, snapshot) {
                         if (snapshot.connectionState ==
@@ -236,7 +237,7 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
                           return Text('Error: /${snapshot.error}');
                         }
 
-                        AddMovieModel? Model;
+                        AddTopCastModel? Model;
                         if (snapshot.data!.docs.length != 0) {
                           print(
                               'snapshot.data!.docs.length/${snapshot.data!.docs.length}');
@@ -250,29 +251,34 @@ class _FuriosaScreenState extends State<FuriosaScreen> {
                                 itemCount: snapshot.data!.docs.length,
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (BuildContext context, int index) {
-                                  Model = AddMovieModel.fromMap(
+                                  Model = AddTopCastModel.fromMap(
                                       snapshot.data!.docs[index].data());
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SizedBox(
-                                      height: height * 0.18,
-                                      width: width * 0.3,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: height * 0.16,
-                                            width: width * 0.3,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      "${Model!.imageUrls![0]}",
-                                                      scale: 2),
-                                                  fit: BoxFit.cover),
-                                            ),
+                                  return SizedBox(
+                                    height: height * 0.22,
+                                    width: width * 0.3,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: height * 0.14,
+                                          width: width * 0.26,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    "${Model!.imageUrls![0]}",
+                                                    scale: 2),
+                                                fit: BoxFit.cover),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        Text(
+                                          "${Model!.name}",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: width * 0.04,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   );
                                 },
